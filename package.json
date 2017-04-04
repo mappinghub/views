@@ -1,0 +1,27 @@
+{
+  "name": "mapping-hub-views",
+  "version": "0.0.1",
+  "description": "Mapping Views",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha ./tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappinghub/views.git"
+  },
+  "author": "dbooth-boston",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mappinghub/views/issues"
+  },
+  "homepage": "https://github.com/mappinghub/views#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "jsonld": "^0.4.11",
+    "underscore": "~1.8.3"
+  }
+}
