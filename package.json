@@ -4,7 +4,8 @@
   "description": "Mapping Views",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha ./tests"
+    "test": "./node_modules/.bin/mocha ./tests",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,13 @@
   "homepage": "https://github.com/mappinghub/views#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-jsoncombine": "^1.0.3",
     "mocha": "^3.2.0"
   },
   "dependencies": {
     "jsonld": "^0.4.11",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "mapping-hub-elements": "https://github.com/mappinghub/elements.git"
   }
 }
