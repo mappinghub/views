@@ -53,7 +53,7 @@ function help(status) {
 }
 
 function outputPath(cmdArgs) { 
-    var outputDir = Path.isAbsolute(cmdArgs.output) ? cmdArgs.output : process.cwd() + cmdArgs.output;
+    var outputDir = Path.isAbsolute(cmdArgs.output) ? cmdArgs.output : process.cwd() + '/' + cmdArgs.output;
     outputDir =  outputDir.endsWith('/') ? outputDir : outputDir + '/';
     return canonicalPath(outputDir);
 }
