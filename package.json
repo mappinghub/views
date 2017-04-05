@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests",
-    "build-mappings": "node bin/build-views --rootdir node_modules/mapping-hub-mappings/mappings --output views/mappings",
-    "build-elements": "node bin/build-views --rootdir node_modules/mapping-hub-elements/elements --output views/elements",
+    "build-mappings": "node bin/build-views --rootdir node_modules/mapping-hub-mappings/mappings --output dist/build/mappings",
+    "build-elements": "node bin/build-views --rootdir node_modules/mapping-hub-elements/elements --output dist/build/elements",
     "build": "npm run build-mappings; npm run build-elements; gulp"
   },
   "repository": {
