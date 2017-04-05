@@ -28,7 +28,8 @@ var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
         {
           $("#getCodeModal .modal-title").text("Detail View: "+oData.name);
           $("#getCodeModal").modal("toggle");
-          //var str = JSON.stringify(JSON.parse(msg), undefined, 2);
+          if (typeof msg !== "object")
+            msg = JSON.stringify(msg, undefined, 2);
           $("#getCode").html(syntaxHighlight(msg));
         }
     });
