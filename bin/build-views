@@ -144,7 +144,7 @@ function walkTree(viewpath, outpath) {
     return new Promise(function(resolve, reject) {
 
       var options = {
-        filters: ["bin"],
+        filters: ["bin", "ont"],
         followLinks: false,
 
         listeners: {
