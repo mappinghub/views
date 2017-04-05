@@ -5,8 +5,15 @@ var _ = require('underscore');
 var jsoncombine = require("gulp-jsoncombine");
 
 gulp.task('default', function(){
-    gulp.src('node_modules/mapping-hub-elements/**/*.jsonld')
+    gulp.src('views/elements/**/*.jsonld')
         .pipe(jsoncombine('elements.jsonld', function (data) {
+            console.log()
+            return new Buffer.from(JSON.stringify(_.values(data)));
+    }))
+        .pipe(gulp.dest('./dist/build'));
+
+    gulp.src('views/mappings/**/*.jsonld')
+    	.pipe(jsoncombine('mappings.jsonld', function (data) {
             console.log()
             return new Buffer.from(JSON.stringify(_.values(data)));
     }))

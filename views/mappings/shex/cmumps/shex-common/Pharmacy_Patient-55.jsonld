@@ -11,5 +11,5 @@
   "mappingLanguage": "ShEx",
   "license": "Apache-2.0",
   "sourceFormat": "cmumps",
-  "targetFormat": "common"
+  "targetFormat": "shex-common"
 }

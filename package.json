@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests",
-    "build": "gulp"
+    "build-mappings": "node bin/build-views --rootdir node_modules/mapping-hub-mappings/mappings --output views/mappings",
+    "build-elements": "node bin/build-views --rootdir node_modules/mapping-hub-elements/elements --output views/elements",
+    "build": "npm run build-mappings; npm run build-elements; gulp"
   },
   "repository": {
     "type": "git",
