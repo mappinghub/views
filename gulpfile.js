@@ -4,20 +4,32 @@ var _ = require('underscore');
 
 var jsoncombine = require("gulp-jsoncombine");
 
-gulp.task('default', function(){
-    gulp.src('views/elements/**/*.jsonld')
-        .pipe(jsoncombine('elements.jsonld', function (data) {
-            console.log()
-            return new Buffer.from(JSON.stringify(_.values(data)));
+var addGulpTask = function(repo){
+	return gulp.src('views/'+repo+'/**/*.jsonld')
+        .pipe(jsoncombine(repo+'.jsonld', function (data) {
+            return new Buffer.from(JSON.stringify(_.map(data, function(value,key){
+            	// add github url for entry
+				value.githubURL = "https://github.com/mappinghub/views/tree/master/views/"+repo+'/'+key+'sonld';
+				return value;
+			})));
     }))
-        .pipe(gulp.dest('./dist/build'));
+    .pipe(gulp.dest('./dist/build'));
+}
 
-    gulp.src('views/mappings/**/*.jsonld')
-    	.pipe(jsoncombine('mappings.jsonld', function (data) {
-            console.log()
-            return new Buffer.from(JSON.stringify(_.values(data)));
-    }))
-        .pipe(gulp.dest('./dist/build'));
+
+
+gulp.task('default', function(){
+	// compile elements
+	addGulpTask("elements");
+
+    //compile mappings
+    addGulpTask("mappings");
+
+    // gulp.src('views/mappings/**/*.jsonld')
+    // 	.pipe(jsoncombine('mappings.jsonld', function (data) {
+    //         return createBuffer(data);
+    // }))
+    // .pipe(gulp.dest('./dist/build'));
 });
 
 // //    Edit JSON with function

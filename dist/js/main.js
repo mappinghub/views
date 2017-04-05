@@ -1,3 +1,8 @@
+
+var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
+  $(nTd).html("<a target='_blank' href='"+oData.githubURL+"'>"+oData.name+"</a>");
+};
+
 $(function(){
   $.ajax({
     url: 'build/elements.jsonld',
@@ -7,7 +12,7 @@ $(function(){
       $('#elements-table').DataTable({
         "data": response,
         "columns": [
-          {"data":"name", "title":"Name"},
+          {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
           {"data":"description","title":"Description"},
           {"data":"type","title":"Type"}
         ]
@@ -23,8 +28,8 @@ $(function(){
       $('#mappings-table').DataTable({
         "data": response,
         "columns": [
-          {"data":"name", "title":"Name"},
-          {"data":"mappingLanguage", "title":"Mapping Language"},
+          {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
+          {"data":"mappingLanguage", "title":"Language"},
           {"data":"description","title":"Description"},
           {"data":"sourceFormat","title":"Source Format"},
           {"data":"targetFormat","title":"Target Format"}
