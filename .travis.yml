@@ -10,4 +10,5 @@ deploy:
   on:
     branch: master
   local_dir: dist
-  target_branch: gh-pages
+  target_branch: master
+  repo: mappinghub.github.io
