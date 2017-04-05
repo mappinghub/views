@@ -11,4 +11,4 @@ deploy:
     branch: master
   local_dir: dist
   target_branch: master
-  repo: mappinghub.github.io
+  repo: mappinghub/mappinghub.github.io
