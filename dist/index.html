@@ -51,7 +51,18 @@
       <div class="container">
         <h1>Mapping Hub</h1>
         <p>This site provides a convenient way to navigate data type definitions and mappings (translations) between different data formats primarilly of use in healthcare.</p>
-      <table role="grid" class="table table-striped table-bordered dataTable no-footer" id="thetable"></table>
+        <ul class="nav nav-tabs" id="tableTabs">
+          <li class="active"><a href="#elements">Elements</a></li>
+          <li><a href="#mappings">Mappings</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="elements">
+            <table role="grid" class="table table-striped table-bordered dataTable no-footer" id="elements-table"></table>
+          </div>
+          <div class="tab-pane" id="mappings">
+            <table role="grid" class="table table-striped table-bordered dataTable no-footer" id="mappings-table"></table>
+          </div>
+        </div>
       </div>
     </div>
 
