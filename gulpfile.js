@@ -9,7 +9,7 @@ var addGulpTask = function(repo){
         .pipe(jsoncombine(repo+'.jsonld', function (data) {
             return new Buffer.from(JSON.stringify(_.map(data, function(value,key){
               // add github url for entry
-        value.githubURL = "https://github.com/mappinghub/views/tree/master/views/"+repo+'/'+key+'sonld';
+        value.githubURL = "/build/"+repo+'/'+key+'sonld';
         return value;
       })));
     }))
