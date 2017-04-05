@@ -1,0 +1,7 @@
+{
+  "@context": "https://raw.githubusercontent.com/mappinghub/elements/master/ont/context.jsonld",
+  "name": "givenName",
+  "description": "Given name of a person",
+  "type": "xsd:string",
+  "skos:exactMatch": "fhir:datatypes-definitions.html#HumanName.given"
+}
