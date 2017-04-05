@@ -5,7 +5,7 @@ var _ = require('underscore');
 var jsoncombine = require("gulp-jsoncombine");
 
 var addGulpTask = function(repo){
-	return gulp.src('dist/build/'+repo+'/**/*.jsonld')
+	return gulp.src('site/build/'+repo+'/**/*.jsonld')
         .pipe(jsoncombine(repo+'.jsonld', function (data) {
             return new Buffer.from(JSON.stringify(_.map(data, function(value,key){
             	// add github url for entry
