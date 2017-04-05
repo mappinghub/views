@@ -1,0 +1,225 @@
+#!/usr/bin/env node
+
+const _ = require('underscore');
+const Cmdline = require('command-line-args');
+const Usage = require('command-line-usage');
+const Fs = require('fs');
+const Mkdirp = require('mkdirp');
+const Path = require('path')
+const Rimraf = require('rimraf');
+const Walk = require('walk');
+
+// Configuration constants
+const DefaultOutputPath = __dirname + '/../.build/';
+const MetadataFileName="metadata.jsonld";
+
+var metadataCache = {};
+
+// Define the command line args and parse to see what we got
+const CmdlineDefs = [
+        { name: "help", alias: "h", type: Boolean },
+        { name: "rootdir", alias: "r", type: String, description: "Root directory with JSON-LD files to be processed to views" },
+        { name: "output", alias: "o", type: String, defaultValue: DefaultOutputPath, description: "Views output directory" }
+];
+
+function canonicalPath(root) { 
+    return Path.isAbsolute(root) ? root : process.cwd() + '/' + root;
+}
+
+function help(status) {
+    console.log(
+        Usage([
+           { header:"build-views",
+            content:"Recursively walk the specified root source directory tree, and generate the views." },
+           { header: 'Synopsis',
+             content: [
+                '$ build-views [bold]{--rootdir} [underline]{directory} [[bold]{--output} [underline]{directory}]',
+                '$ build-views [bold]{--help}'
+             ]},
+           { header: 'Options',
+             optionList: [
+                 { name: 'rootdir', 
+                   typeLabel: '[underline]{directory}',
+                   description: 'The root directory from which view data should be found and processed.'},
+                 { name: 'output', 
+                   typeLabel: '[underline]{directory}',
+                   description: 'The views output directory.'}
+              ]
+            },
+            { content: "Project home: [underline]{https://github.com/mappinghub/views}" }
+        ])
+    );
+    process.exit(status);
+}
+
+function outputPath(cmdArgs) { 
+    var outputDir = Path.isAbsolute(cmdArgs.output) ? cmdArgs.output : process.cwd() + cmdArgs.output;
+    outputDir =  outputDir.endsWith('/') ? outputDir : outputDir + '/';
+    return canonicalPath(outputDir);
+}
+
+function rootPath(cmdArgs) {
+    if (_.isEmpty(cmdArgs.rootdir)) { 
+        console.error('Expected a rootdir from which to begin processing the views input data!');
+        help(1);
+    }
+    var root =  cmdArgs.rootdir.endsWith('/') ? cmdArgs.rootdir : cmdArgs.rootdir + '/';
+    return canonicalPath(root);
+}
+
+/**
+ * Create a clean directory.  If the directory exists, it will be deleted and recreated.
+ *
+ * @param dirpath target directory path
+ */
+function createCleanDir(dirpath) { 
+    try { 
+        Rimraf.sync(dirpath);
+        Fs.mkdirSync(dirpath);
+    } catch (e) {  
+        console.error('Unable to clean directory '+dirpath+':',e);
+        process.exit(1);
+    }
+}
+
+/** 
+ * Read and parse JSON file content.  Replace this with a load to an RDF store.
+ *
+ * @param canoncial file name
+ * 
+ * @return a Javascript object with the JSON file content
+ */
+function fileContent(filepath) {
+    try {
+        return JSON.parse(Fs.readFileSync(filepath, 'utf-8'));
+    } catch(e) {
+        console.error("Unable to process file " + filepath + ": " + e.message);
+        process.exit(1);
+    }
+}
+
+/** 
+ * Merge two hashes, by copying all attributes in the newHAsh into the targetHash. 
+ * 
+ * @param newHash new hash with attributes to be merged into the target hash.
+ *
+ * @return the targetHash
+ */
+function merge(newHash, targetHash) { 
+    _.mapObject(newHash, function(val, key) { 
+        if (!_.isEmpty(targetHash[key]) && val !== targetHash[key]) {
+            console.warn("Overriding " + key + ": " + targetHash[key] + " with " + key + ": " + val + '\n');
+        }
+        targetHash[key] = val; 
+    });
+
+    return targetHash;
+}
+
+/**
+ * Read a metadata file (specified by dirpath + filename) and combine it with existing metadata.
+ * Save the resulting metadata to the cache so we only read the file once and also do not cross-contaiminate
+ * sibling directory metadata.
+ * 
+ * @dirpath  path to the metadata file to be read.  
+ * @filename metadata file name
+ */
+function processMetadata(dirpath, filename) {
+    var parentPath = Path.dirname(dirpath);
+    var metadata = _.isUndefined(metadataCache[parentPath]) ? {} : _.clone(metadataCache[parentPath]);
+    merge(fileContent(Path.join(dirpath, filename)), metadata); 
+    metadataCache[dirpath] = metadata;
+}
+
+/**
+ * Walks a directory tree, processing directories and files.
+ * 
+ * @param viewpath path to the input data for the views
+ * @param outpath  path to views output directory
+ * 
+ * @return a promise to complete the view generation or reject it on error
+ */
+function walkTree(viewpath, outpath) { 
+
+    return new Promise(function(resolve, reject) {
+
+      var options = {
+        filters: ["bin"],
+        followLinks: false,
+
+        listeners: {
+
+            file: function (root, fileStats, next) {
+                var filename = fileStats.name;
+
+                if (filename === MetadataFileName) { 
+                    // Read metadata file and add it to the metadata cache
+                    processMetadata(root, filename);
+
+                } else {
+                    var content = fileContent(Path.join(root, filename));
+                    if (_.isUndefined(metadataCache[root]) && Fs.existsSync(Path.join(root, MetadataFileName))) {
+                        // We have unread sibling metadata in this directory - read and cache it now
+                        processMetadata(root, MetadataFileName);
+                    }
+		    merge(metadataCache[root], content);
+                    var filepath = outpath + root.replace(viewpath, '');
+		    if (!Fs.existsSync(filepath)) { 
+                       Mkdirp.sync(filepath); 
+                    }
+                    Fs.writeFileSync(Path.join(filepath, filename), JSON.stringify(content, null, 2), 'utf-8');
+                }
+                next();
+            },
+
+            errors: function (root, nodeStatsArray, next) {
+                reject(Error('Unable to process',root,': ',nodeStatsArray));
+            }, 
+
+            end: function() { 
+                resolve();
+            }
+        }
+      };
+
+      Walk.walk(viewpath, options);
+    });
+}
+
+/** 
+ * Get a list of the directories under dirpath filtering out any hidden ones.
+ */
+function visibleDirectories(dirpath) {
+  return Fs.readdirSync(dirpath)
+    .filter(file => Fs.statSync(Path.join(dirpath, file)).isDirectory() && !file.startsWith('.'))
+}
+
+/************************  Main ****************************/
+
+try {
+    const cmdArgs = Cmdline(CmdlineDefs)
+} catch(e) {
+   console.error(e.message);
+   help(1);
+}
+
+if (cmdArgs.help) help(0);
+
+const RootDir = rootPath(cmdArgs);
+const OutputDir = outputPath(cmdArgs);
+
+createCleanDir(OutputDir);
+
+// Walk each directory, building the metadata and files
+_.map(
+    visibleDirectories(RootDir), function(dir) { 
+
+        walkTree(
+            RootDir + dir,             // path to the view input data
+            OutputDir + dir + '/'      // path to the output directory
+        ).then(function(results) {
+            // Add summary generation code here
+            console.log('generate summary');
+        });
+    }
+);
