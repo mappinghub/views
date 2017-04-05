@@ -10,7 +10,7 @@ gulp.task('default', function(){
             console.log()
             return new Buffer.from(JSON.stringify(_.values(data)));
     }))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./dist/build'));
 });
 
 // //    Edit JSON with function
