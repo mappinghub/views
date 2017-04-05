@@ -7,6 +7,9 @@
     "name": "Ken Lord",
     "email": "klordmdmi@gmail.com"
   },
+  "sourceCode": "http://example.com/",
   "mappingLanguage": "MDMI",
-  "sourceCode": "http://example.com/"
+  "license": "Apache-2.0",
+  "sourceFormat": "des",
+  "targetFormat": "mdmi-common"
 }
