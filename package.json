@@ -29,6 +29,7 @@
     "handlebars": "~4.0.4",
     "jsonld": "^0.4.11",
     "mapping-hub-elements": "https://github.com/mappinghub/elements.git",
+    "mapping-hub-mappings": "https://github.com/mappinghub/mappings.git",
     "mkdirp": "^0.5.1",
     "promise": "^7.0.4",
     "request": "^2.79.0",
