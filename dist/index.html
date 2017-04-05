@@ -1,12 +1,15 @@
-<!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
-    <head>
+<!DOCTYPE html>
+<html class="no-js"><head>
+  <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]--><!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]--><!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]--><!--[if gt IE 8]><!--><!--<![endif]-->
+
+
+
+  
+    
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Mapping Hub</title>
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
@@ -16,22 +19,19 @@
             }
         </style>
         <link rel="stylesheet" href="css/main.css">
-      	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/cr-1.3.2/datatables.min.css"/>
-        <link rel="stylesheet" href="css/ghfork.css" />
-        <!--[if lt IE 9]>
+      	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/cr-1.3.2/datatables.min.css">
+        <link rel="stylesheet" href="css/ghfork.css"><!--[if lt IE 9]>
             <link rel="stylesheet" href="css/ghfork-ie.css" />
         <![endif]-->
+        
 
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/cr-1.3.2/datatables.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-
-    </head>
-    <body>
+        <script type="text/javascript" src="js/main.js"></script></head><body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
+      </nav><div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -42,7 +42,7 @@
           <a class="navbar-brand" href="/">Mapping Hub Home</a>
         </div>
       </div>
-    </nav>
+    
 
 	<a class="github-fork-ribbon" href="http://github.com/mappinghub/" title="Find us on GitHub">Fork me on GitHub</a>
 
@@ -50,7 +50,10 @@
     <div class="jumbotron">
       <div class="container">
         <h1>Mapping Hub</h1>
-        <p>This site provides a convenient way to navigate data type definitions and mappings (translations) between different data formats primarilly of use in healthcare.</p>
+        <p>This
+site provides a convenient way to navigate data type definitions and
+mappings (translations) between different data formats primarilly of
+use in healthcare.</p>
         <ul class="nav nav-tabs" id="tableTabs">
           <li class="active"><a href="#elements">Elements</a></li>
           <li><a href="#mappings">Mappings</a></li>
@@ -70,26 +73,35 @@
       <div class="row">
         <div class="col-md-4">
           <h2>Elements</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="https://www.github.com/mappinghub/elements" role="button">Visit Repo &raquo;</a></p>
+          <p>The
+Elements repository contains descriptions of source, target and/or
+intermediate data elements used by mappings or translations.<br>
+ </p>
+          <p><a class="btn btn-default" href="https://www.github.com/mappinghub/elements" role="button">Visit Repo »</a></p>
         </div>
         <div class="col-md-4">
           <h2>Mappings</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="http://www.github.com/mappinghub/mappings" role="button">Visit Repo &raquo;</a></p>
+          <p>The
+Mappings repository contains descriptions of mappings (a/k/a
+translations) that are used to convert source data formats, data models
+and/or vocabularies to target data formats, data models and/or
+vocabularies.<br>
+ </p>
+          <p><a class="btn btn-default" href="http://www.github.com/mappinghub/mappings" role="button">Visit Repo »</a></p>
        </div>
         <div class="col-md-4">
           <h2>Views</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="https://www.github.com/mappinghub/views" role="button">Visit Repo &raquo;</a></p>
+          <p>The Views repository contains definitions of various auto-generated views of mappings and elements.<br>
+</p>
+          <p><a class="btn btn-default" href="https://www.github.com/mappinghub/views" role="button">Visit Repo »</a></p>
         </div>
       </div>
 
       <hr>
 
       <footer>
-        <p>&copy; Company 2015</p>
-      </footer>
+        </footer><p>© Company 2015</p>
+      
     </div> <!-- /container -->
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
         <script>
@@ -101,6 +113,4 @@
             ga('create','UA-XXXXX-X','auto');ga('send','pageview');
         </script>
 	-->
-    </body>
-</html>
-
+    </body></html>
