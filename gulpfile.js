@@ -3,6 +3,7 @@ var _ = require('underscore');
 //var merge = require('gulp-merge-json');
 
 var jsoncombine = require("gulp-jsoncombine");
+var replace = require("gulp-replace");
 
 var addGulpTask = function(repo){
   return gulp.src('site/build/'+repo+'/**/*.jsonld')
@@ -15,13 +16,17 @@ var addGulpTask = function(repo){
     }))
     .pipe(gulp.dest('./site/build'));
 }
-
+function updateSite(){
+  gulp.src(['site/index.html','site/package.json'])
+    .pipe(replace('$BUILDNUMBER',process.env.TRAVIS_BUILD_NUMBER))
+    .pipe(gulp.dest('site/'));
+}
 
 
 gulp.task('default', function(){
     // compile elements
     addGulpTask("elements");
-
+    updateSite();
     //compile mappings
     addGulpTask("mappings");
 });
