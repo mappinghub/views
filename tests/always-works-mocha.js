@@ -12,6 +12,6 @@ var _ = require('underscore');
 
     describe('always true', function() {
         it('is always true', function() {
-            expect(true).to.equal(true);
+            expect(false).to.equal(true);
         });
     });
