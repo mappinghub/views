@@ -7,7 +7,7 @@
     "test": "./node_modules/.bin/mocha ./tests",
     "build-mappings": "bin/build-views --rootdir node_modules/mapping-hub-mappings/mappings --output site/build/mappings",
     "build-elements": "bin/build-views --rootdir node_modules/mapping-hub-elements/elements --output site/build/elements",
-    "build": "npm run build-mappings; npm run build-elements; gulp"
+    "build": "npm run build-mappings && npm run build-elements && gulp"
   },
   "repository": {
     "type": "git",
