@@ -3,7 +3,7 @@
 	padding: 5px;
 	background-color: white;
  }
-
+.title img{display: inline-block; float: right;}
  pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
 .string { color: green; }
 .number { color: darkorange; }
