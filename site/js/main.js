@@ -17,6 +17,15 @@ function syntaxHighlight(json) {
     });
 }
 
+
+var createMapCell = function (nTd, sData, oData, iRow, iCol) {
+  var elt="";
+  $.each(oData.maps,function(i, obj){
+	elt += "<div class='mapping'>"+obj.source+"->"+obj.target+"</div>";
+	});
+  $(nTd).html(elt);
+}
+
 var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
   var elt = $("<a data-href='"+oData.githubURL+"'>"+oData.name+"</a>");
   $(nTd).html(elt);
@@ -65,8 +74,7 @@ $(function(){
           {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
           {"data":"mappingLanguage", "title":"Language"},
           {"data":"description","title":"Description"},
-          {"data":"sourceFormat","title":"Source Format"},
-          {"data":"targetFormat","title":"Target Format"}
+          {"data":"maps","title":"Translations Available", "fnCreatedCell":createMapCell}
         ]
       });
     }
