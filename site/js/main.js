@@ -28,7 +28,7 @@ var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
         {
           $("#getCodeModal .modal-title").text("Detail View: "+oData.name);
           $("#getCodeModal").modal("toggle");
-          if (typeof msg !== "object")
+          if (typeof msg !== "string")
             msg = JSON.stringify(msg, undefined, 2);
           $("#getCode").html(syntaxHighlight(msg));
         }
