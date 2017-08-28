@@ -24,7 +24,7 @@ function updateSite(){
   gulp.src(['site/README.md'])
     .pipe(replace('You may edit the site here. (do not change/remove this line!)',
       'Do not edit the site here!'))
-    .pipe(gupl.dest('site/'));
+    .pipe(gulp.dest('site/'));
 }
 
 
