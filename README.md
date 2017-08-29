@@ -2,6 +2,7 @@
 This repository contains software for auto-generating views of [Mappings](https://github.com/mappinghub/mappings) and [Elements](https://github.com/mappinghub/elements), along with the resulting [Views](https://github.com/mappinghub/views/views).
 
 ![](https://travis-ci.org/mappinghub/views.svg?branch=master)
+If the build fails, login to travis and click the following [link](https://travis-ci.org/mappinghub/views).
 
 This is how the mappinghub deployment works:
 * When the master branch of either [Mapping](https://github.com/mappinghub/mappings) or [Element](https://github.com/mappinghub/elements) repositories update, github triggers [Travis CI] to run a small script.
