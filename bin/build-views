@@ -156,6 +156,8 @@ function walkTree(viewpath, outpath) {
                     // Read metadata file and add it to the metadata cache
                     processMetadata(root, filename);
 
+                } else if ("md" == (filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename) )
+                    //ignore metadata files
                 } else {
                     var content = fileContent(Path.join(root, filename));
                     if (_.isUndefined(metadataCache[root]) && Fs.existsSync(Path.join(root, MetadataFileName))) {
