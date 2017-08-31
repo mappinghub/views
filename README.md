@@ -17,3 +17,4 @@ https://github.com/mappinghub/views/blob/master/bin/build-views) twice, creating
     * construct a new version of the mappinghub.github.io site, including filling in build # from the environment variable: TRAVIS_BUILD_NUMBER
 * Travis runs NPM test, if that fails, it is not deployed
 * Travis deploys to mappinghub.github.io
+*
