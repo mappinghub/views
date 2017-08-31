@@ -85,15 +85,17 @@ var createMapCell = function (nTd, sData, oData, iRow, iCol) {
 */
 
 var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
-  var elt = $("<a data-href='"+oData.githubURL+"'>"+oData.name+"</a>");
+  var elt = $("<a>"+oData.name+"</a>");
   $(nTd).html(elt);
   elt.click(function(){
     $.ajax({
         type: "GET",
-        url: elt.data("href"),
+        url: oData.hostedURL,
         success: function(msg)
         {
-          $("#getCodeModal .modal-title").text("Detail View: "+oData.name);
+          $("#getCodeModal .modal-title").text("Detail View: ")
+            .append('<a title="click to download" target="_blank" href="'+oData.hostedURL+'">'+oData.name+'</a>')
+            .append('<a class="link-small" target="_blank" href="'+oData.githubURL+'">[view on github]</a>');
           $("#getCodeModal").modal("toggle");
           if (typeof msg !== "string")
             msg = JSON.stringify(msg, undefined, 2);
