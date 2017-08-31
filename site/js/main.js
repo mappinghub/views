@@ -169,7 +169,7 @@ $(function(){
           { "title":"Source Format", "data": "maps.0.source"},
           { "title":"Target Format", "data": "maps.0.target"},
           { "title":"Name", "data":"name",  "fnCreatedCell":createLinkCell },
-          { "title":"Language", "data":"mappingLanguage" },
+          { "title":"Translator Language", "data":"mappingLanguage" },
           { "title":"Description", "data":"description", "disableSelect": true }
         ],
         "initComplete": createDropdown
