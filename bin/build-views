@@ -156,9 +156,8 @@ function walkTree(viewpath, outpath) {
                     // Read metadata file and add it to the metadata cache
                     processMetadata(root, filename);
 
-                } else if ("md" == (filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename) ) {
-                    //ignore metadata files
-                } else {
+                } else if ("jsonld" == (filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename) ) {
+                    //only process jsonld files
                     var content = fileContent(Path.join(root, filename));
                     if (_.isUndefined(metadataCache[root]) && Fs.existsSync(Path.join(root, MetadataFileName))) {
                         // We have unread sibling metadata in this directory - read and cache it now
@@ -170,6 +169,8 @@ function walkTree(viewpath, outpath) {
                        Mkdirp.sync(filepath); 
                     }
                     Fs.writeFileSync(Path.join(filepath, filename), JSON.stringify(content, null, 2), 'utf-8');
+                } else {
+                    //  ignore other files
                 }
                 next();
             },
