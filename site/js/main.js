@@ -17,7 +17,21 @@ function syntaxHighlight(json) {
     });
 }
 
+// var searchMapOption = function(column, val){}
 
+var createMapOption = function(column, select){
+  var allFormat = new Set();
+  column.data().unique().sort().each( function ( d, j ) {
+    d.forEach(function(elt) {
+      allFormat.add(elt.source);
+      allFormat.add(elt.target);
+    });
+  });
+  allFormat.forEach(function(d){
+      select.append( '<option value="'+d+'">'+d+'</option>' );
+  });
+};
+/*
 var createMapCell = function (nTd, sData, oData, iRow, iCol) {
   var elt="";
   $.each(oData.maps,function(i, obj){
@@ -25,6 +39,7 @@ var createMapCell = function (nTd, sData, oData, iRow, iCol) {
 	});
   $(nTd).html(elt);
 }
+*/
 
 var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
   var elt = $("<a data-href='"+oData.githubURL+"'>"+oData.name+"</a>");
@@ -46,6 +61,40 @@ var createLinkCell = function (nTd, sData, oData, iRow, iCol) {
 
 };
 
+
+// Dropdowns will be created for all columns except those that have the "disableSelect" flag set in
+//   the datatable column configuration. "fnSelect" is an alternate parsing function used for special
+//   cases, like the object array used for translations
+var createDropdown = function (settings) {
+  this.api().columns().every( function () {
+      var column = this;
+      if (settings.aoColumns[column.index()].disableSelect){
+        $('<div>&nbsp</div>').appendTo($(column.header()) ); //filler
+        return
+      }
+      var select = $('<select class="newline "><option value="">show all</option></select>')
+          .appendTo( $(column.header()) )
+          .on( 'change', function () {
+              var val = $.fn.dataTable.util.escapeRegex(
+                  $(this).val()
+              );
+              // if (settings.aoColumns[column.index()].fnSearch)
+              //   settings.aoColumns[column.index()].fnSearch(column, val);
+              // else
+                column
+                  .search( val ? val : '', true, false )
+                  .draw();
+          } );
+      if (settings.aoColumns[column.index()].fnSelect)
+        settings.aoColumns[column.index()].fnSelect(column, select);
+      else
+        column.data().unique().sort().each( function ( d, j ) {
+          select.append('<option value="'+d+'">'+d+'</option>');
+        } );
+  } );
+};
+
+
 $(function(){
   $.ajax({
     url: 'build/elements.jsonld',
@@ -56,9 +105,10 @@ $(function(){
         "data": response,
         "columns": [
           {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
-          {"data":"description","title":"Description"},
+          {"data":"description","title":"Description",  "disableSelect": true},
           {"data":"type","title":"Type"}
-        ]
+        ],
+        "initComplete": createDropdown
       });
     }
   });
@@ -73,9 +123,51 @@ $(function(){
         "columns": [
           {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
           {"data":"mappingLanguage", "title":"Language"},
-          {"data":"description","title":"Description"},
-          {"data":"maps","title":"Translations Available", "fnCreatedCell":createMapCell}
-        ]
+          {"data":"description","title":"Description", "disableSelect": true},
+          {"title":"Translations Available",
+            "fnSelect": createMapOption,
+            "data":function( row, type, set, meta ){
+              //                console.log(type)
+
+              if (type === 'display') {
+                if (!row.map_display) {
+                  row.map_display = "";
+                  row.maps.forEach(function(obj) {
+                    if (row.map_display !== "")
+                      row.map_display += "\n";
+                    row.map_display += obj.source+"->"+obj.target;
+                  });
+                }
+                return row.map_display;
+              }
+              else if (type === 'filter') {
+                if (!row.map_filter) {
+                  var allFormat = new Set();
+                  row.maps.forEach(function(elt) {
+                    allFormat.add(elt.source);
+                    allFormat.add(elt.target);
+                  });
+                  row.map_filter = "";
+                  allFormat.forEach(function(type) {
+                    row.map_filter += type + " ";
+                  });
+                }
+                return row.map_filter;              }
+              else if (type === 'sort') {
+                return row.map_filter;
+              }
+              else if (type === undefined) //for api call
+                return row.maps;
+              else
+              // 'sort', 'type' and undefined all just use the default
+                return row.map;
+            }}
+//            "fnCreatedCell": createMapCell,
+//
+//            "fnSearch": searchMapOption
+//          }
+        ],
+        "initComplete": createDropdown
       });
     }
   });
