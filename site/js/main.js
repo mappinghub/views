@@ -127,9 +127,10 @@ $(function(){
           {"title":"Translations Available",
             "fnSelect": createMapOption,
             "data":function( row, type, set, meta ){
-              //                console.log(type)
-
-              if (type === 'display') {
+              if (type === "type"){
+                return "string"; // force type detection to string, since that's what we use for filter
+              }
+              else if (type === 'display') {
                 if (!row.map_display) {
                   row.map_display = "";
                   row.maps.forEach(function(obj) {
@@ -159,7 +160,6 @@ $(function(){
               else if (type === undefined) //for api call
                 return row.maps;
               else
-              // 'sort', 'type' and undefined all just use the default
                 return row.map;
             }}
 //            "fnCreatedCell": createMapCell,
