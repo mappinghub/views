@@ -5,17 +5,26 @@ var _ = require('underscore');
 var jsoncombine = require("gulp-jsoncombine");
 var replace = require("gulp-replace");
 
+var updatedData;
+
 var addGulpTask = function(repo){
   return gulp.src('site/build/'+repo+'/**/*.jsonld')
         .pipe(jsoncombine(repo+'.jsonld', function (data) {
-            return new Buffer.from(JSON.stringify(_.map(data, function(value,key){
-              // add github url for entry
-        value.githubURL = "/build/"+repo+'/'+key+'sonld';
-        return value;
-      })));
-    }))
-    .pipe(gulp.dest('./site/build'));
+            updatedData = [];
+            _.forEach ( data, function ( object, key ) {
+                object.githubURL = "/build/"+repo+'/'+key+'sonld';
+                if ( object.maps )
+                  object.maps.forEach( function (mapping) {
+                    updatedData.push(_.extend(_.omit(object,"maps"),{"maps":[mapping]}));
+                  });
+                else
+                  updatedData.push(object);
+            });
+            return new Buffer.from(JSON.stringify(updatedData));
+        }))
+        .pipe(gulp.dest('./site/build'));
 }
+
 function updateSite(){
   gulp.src(['site/index.html','site/package.json'])
     .pipe(replace('$BUILDNUMBER',process.env.TRAVIS_BUILD_NUMBER))
