@@ -19,6 +19,49 @@ function syntaxHighlight(json) {
 
 // var searchMapOption = function(column, val){}
 
+var returnDataForTranslations = function( row, type, set, meta ){
+  if (type === "type"){
+    return "string"; // force type detection to string, since that's what we use for filter
+  }
+  else if (type === 'display') {
+    if (!row.map_display) {
+      row.map_display = "";
+      row.maps.forEach(function(obj) {
+        if (row.map_display !== "")
+          row.map_display += "\n";
+        row.map_display += obj.source+"->"+obj.target;
+      });
+    }
+    return row.map_display;
+  }
+  else if (type === 'filter') {
+    if (!row.map_filter) {
+      var allFormat = new Set();
+      row.maps.forEach(function(elt) {
+        allFormat.add(elt.source);
+        allFormat.add(elt.target);
+      });
+      row.map_filter = "";
+      allFormat.forEach(function(type) {
+        row.map_filter += type + " ";
+      });
+    }
+    return row.map_filter;              }
+  else if (type === 'sort') {
+    return row.maps[0].source.charCodeAt(0);
+  }
+  else if (type === undefined) //for api call
+    return row.maps;
+  else
+    return row.map;
+};
+
+//            "fnCreatedCell": createMapCell,
+//
+//            "fnSearch": searchMapOption
+//          }
+
+
 var createMapOption = function(column, select){
   var allFormat = new Set();
   column.data().unique().sort().each( function ( d, j ) {
@@ -121,51 +164,10 @@ $(function(){
       $('#mappings-table').DataTable({
         "data": response,
         "columns": [
-          {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
-          {"data":"mappingLanguage", "title":"Language"},
-          {"data":"description","title":"Description", "disableSelect": true},
-          {"title":"Translations Available",
-            "fnSelect": createMapOption,
-            "data":function( row, type, set, meta ){
-              if (type === "type"){
-                return "string"; // force type detection to string, since that's what we use for filter
-              }
-              else if (type === 'display') {
-                if (!row.map_display) {
-                  row.map_display = "";
-                  row.maps.forEach(function(obj) {
-                    if (row.map_display !== "")
-                      row.map_display += "\n";
-                    row.map_display += obj.source+"->"+obj.target;
-                  });
-                }
-                return row.map_display;
-              }
-              else if (type === 'filter') {
-                if (!row.map_filter) {
-                  var allFormat = new Set();
-                  row.maps.forEach(function(elt) {
-                    allFormat.add(elt.source);
-                    allFormat.add(elt.target);
-                  });
-                  row.map_filter = "";
-                  allFormat.forEach(function(type) {
-                    row.map_filter += type + " ";
-                  });
-                }
-                return row.map_filter;              }
-              else if (type === 'sort') {
-                return row.maps[0].source.charCodeAt(0);
-              }
-              else if (type === undefined) //for api call
-                return row.maps;
-              else
-                return row.map;
-            }}
-//            "fnCreatedCell": createMapCell,
-//
-//            "fnSearch": searchMapOption
-//          }
+          { "title":"Translations Available", "fnSelect": createMapOption, "data": returnDataForTranslations },
+          { "title":"Name", "data":"name",  "fnCreatedCell":createLinkCell },
+          { "title":"Language", "data":"mappingLanguage" },
+          { "title":"Description", "data":"description", "disableSelect": true }
         ],
         "initComplete": createDropdown
       });
