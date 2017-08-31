@@ -7,6 +7,9 @@ function syntaxHighlight(json) {
                 cls = 'key';
             } else {
                 cls = 'string';
+                if (match.startsWith('\"http')){
+                  match = '<a target="_blank" href='+match+'>'+match+'</a>'
+                }
             }
         } else if (/true|false/.test(match)) {
             cls = 'boolean';
