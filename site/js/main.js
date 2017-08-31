@@ -127,7 +127,8 @@ var createDropdown = function (settings) {
                 column
                   .search( val ? val : '', true, false )
                   .draw();
-          } );
+          } )
+          .on( 'click', function(e){e.stopPropagation()});
       if (settings.aoColumns[column.index()].fnSelect)
         settings.aoColumns[column.index()].fnSelect(column, select);
       else
