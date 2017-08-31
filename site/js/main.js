@@ -168,10 +168,10 @@ $(function(){
         "data": response,
         "columns": [
           //{ "title":"Translations Available", "fnSelect": createMapOption, "data": returnDataForTranslations },
-          { "title":"Source Format", "data": "maps.0.source"},
-          { "title":"Target Format", "data": "maps.0.target"},
+          { "title":"Source Model", "data": "maps.0.source"},
+          { "title":"Target Model", "data": "maps.0.target"},
           { "title":"Name", "data":"name",  "fnCreatedCell":createLinkCell },
-          { "title":"Language", "data":"mappingLanguage" },
+          { "title":"Translator Language", "data":"mappingLanguage" },
           { "title":"Description", "data":"description", "disableSelect": true }
         ],
         "initComplete": createDropdown
