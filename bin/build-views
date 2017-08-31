@@ -22,6 +22,34 @@ const CmdlineDefs = [
         { name: "output", alias: "o", type: String, defaultValue: DefaultOutputPath, description: "Views output directory" }
 ];
 
+/**
+ * Get the closest ancestor metadata if there is any. Return {} if there is none.
+ *
+ * @param path directory path to current location being processed
+ */
+function ancestorMetadata(path, rootElements) {
+     // Strip off the last directory on the path to get the most recent ancestor directory path
+    rootElements = _.isUndefined(rootElements) ? path.split('/') : rootElements;
+    rootElements.pop();  // pop off the last directory from the root path
+    var ancestorPath = rootElements.join('/');
+
+    // Got any ancestor metadata in the cache? 
+    var metadata = metadataCache[ancestorPath];
+    if (_.isUndefined(metadata)) {
+
+        // No metadata with this ancestor.  Does it have a parent? 
+        if (rootElements.length > 1) { 
+            metadata = ancestorMetadata(ancestorPath, rootElements);
+        } else {
+            // No more ancestors - default to empty metadata
+            metadata = {}; 
+        }
+    } 
+
+    metadataCache[path] = metadata;
+    return metadata;
+}
+
 function canonicalPath(root) { 
     return Path.isAbsolute(root) ? root : process.cwd() + '/' + root;
 }
@@ -156,12 +184,17 @@ function walkTree(viewpath, outpath) {
                     // Read metadata file and add it to the metadata cache
                     processMetadata(root, filename);
 
-                } else if ("jsonld" == (filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename) ) {
+                } else if (filename.endsWith("\.jsonld")) {
                     //only process jsonld files
                     var content = fileContent(Path.join(root, filename));
-                    if (_.isUndefined(metadataCache[root]) && Fs.existsSync(Path.join(root, MetadataFileName))) {
-                        // We have unread sibling metadata in this directory - read and cache it now
-                        processMetadata(root, MetadataFileName);
+                    if (_.isUndefined(metadataCache[root])) {
+                        if (Fs.existsSync(Path.join(root, MetadataFileName))) {
+                            // We have unread sibling metadata in this directory - read and cache it now
+                            processMetadata(root, MetadataFileName);
+                        } else { 
+                            // No metadata file in this directory - fill the cache with whatever is available from the closest ancester
+                            ancestorMetadata(root);
+                        }
                     }
 		    merge(metadataCache[root], content);
                     var filepath = outpath + root.replace(viewpath, '');
@@ -199,13 +232,13 @@ function visibleDirectories(dirpath) {
 
 /************************  Main ****************************/
 
+var cmdArgs = {};
 try {
-    const cmdArgs = Cmdline(CmdlineDefs)
+    cmdArgs = Cmdline(CmdlineDefs)
 } catch(e) {
    console.error(e.message);
    help(1);
 }
-
 if (cmdArgs.help) help(0);
 
 const RootDir = rootPath(cmdArgs);
@@ -222,7 +255,7 @@ _.map(
             OutputDir + dir + '/'      // path to the output directory
         ).then(function(results) {
             // Add summary generation code here
-            console.log('generate summary');
+            // console.log('generate summary');
         });
     }
 );
