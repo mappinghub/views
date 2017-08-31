@@ -154,7 +154,7 @@ $(function(){
                 }
                 return row.map_filter;              }
               else if (type === 'sort') {
-                return row.map_filter;
+                return row.maps[0].source.charCodeAt(0);
               }
               else if (type === undefined) //for api call
                 return row.maps;
