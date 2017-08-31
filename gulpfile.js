@@ -7,12 +7,13 @@ var replace = require("gulp-replace");
 
 var updatedData;
 
-var addGulpTask = function(repo){
+var addGulpTask = function(repo, publicURL){
   return gulp.src('site/build/'+repo+'/**/*.jsonld')
         .pipe(jsoncombine(repo+'.jsonld', function (data) {
             updatedData = [];
             _.forEach ( data, function ( object, key ) {
-                object.githubURL = "/build/"+repo+'/'+key+'sonld';
+                object.hostedURL = "/build/"+repo+'/'+key+'sonld';
+                object.githubURL = publicURL+repo+'/'+key+'sonld';
                 if ( object.maps )
                   object.maps.forEach( function (mapping) {
                     updatedData.push(_.extend(_.omit(object,"maps"),{"maps":[mapping]}));
@@ -39,10 +40,10 @@ function updateSite(){
 
 gulp.task('default', function(){
     // compile elements
-    addGulpTask("elements");
+    addGulpTask("elements", "https://github.com/mappinghub/elements/blob/master/");
     if (process.env.TRAVIS_BUILD_NUMBER) updateSite();
     //compile mappings
-    addGulpTask("mappings");
+    addGulpTask("mappings", "https://github.com/mappinghub/mappings/blob/master/");
 });
 
 // //   Provide a default object (files are merged in order so object values will be overwritten)
