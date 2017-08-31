@@ -1,3 +1,8 @@
+.newline{
+	display:block;
+}
+th::after{ margin-bottom: 22px; }
+
 .tab-content{
 	border:1px solid #ddd;
 	padding: 5px;

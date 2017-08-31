@@ -31,7 +31,7 @@ function updateSite(){
 gulp.task('default', function(){
     // compile elements
     addGulpTask("elements");
-    updateSite();
+    if (process.env.TRAVIS_BUILD_NUMBER) updateSite();
     //compile mappings
     addGulpTask("mappings");
 });
