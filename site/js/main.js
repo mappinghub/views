@@ -155,6 +155,7 @@ $(function(){
         "columns": [
           {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
           {"data":"description","title":"Description",  "disableSelect": true},
+	  {"data":"author","title":"Author",  "disableSelect": true},
           {"data":"type","title":"Type"}
         ],
         "initComplete": createDropdown
@@ -175,7 +176,8 @@ $(function(){
           { "title":"Target Model", "data": "maps.0.target"},
           { "title":"Name", "data":"name",  "fnCreatedCell":createLinkCell },
           { "title":"Translator Language", "data":"mappingLanguage" },
-          { "title":"Description", "data":"description", "disableSelect": true }
+          { "title":"Description", "data":"description", "disableSelect": true },
+	  { "title":"Author", "data":"author", "disableSelect": true }
         ],
         "initComplete": createDropdown
       });
