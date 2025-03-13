@@ -155,7 +155,7 @@ $(function(){
         "columns": [
           {"data":"name", "title":"Name", "fnCreatedCell":createLinkCell},
           {"data":"description","title":"Description",  "disableSelect": true},
-	  {"data":"author","title":"Author",  "disableSelect": true},
+	  // {"data":"author","title":"Author",  "disableSelect": true},
           {"data":"type","title":"Type"}
         ],
         "initComplete": createDropdown
@@ -171,13 +171,13 @@ $(function(){
       $('#mappings-table').DataTable({
         "data": response,
         "columns": [
-          //{ "title":"Translations Available", "fnSelect": createMapOption, "data": returnDataForTranslations },
+          { "title":"Translations Available", "fnSelect": createMapOption, "data": returnDataForTranslations },
           { "title":"Source Model", "data": "maps.0.source"},
           { "title":"Target Model", "data": "maps.0.target"},
           { "title":"Name", "data":"name",  "fnCreatedCell":createLinkCell },
           { "title":"Translator Language", "data":"mappingLanguage" },
           { "title":"Description", "data":"description", "disableSelect": true },
-	  { "title":"Author", "data":"author", "disableSelect": true }
+	  // { "title":"Author", "data":"author", "disableSelect": true }
         ],
         "initComplete": createDropdown
       });
